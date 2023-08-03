@@ -66,8 +66,8 @@ INSERT INTO superbowls(Date,SB,Winner,Winner_Pts,Loser,Loser_Pts,MVP,Stadium,Cit
 INSERT INTO superbowls(Date,SB,Winner,Winner_Pts,Loser,Loser_Pts,MVP,Stadium,City,State) VALUES ('Jan 15 1967','I (1)','Green Bay Packers',35,'Kansas City Chiefs',10,'Bart Starr+','Memorial Coliseum','Los Angeles','California');
 
 
---Display Superbowl results from past 10 years.
-SELECT * FROM superbowls LIMIT 10;
+--Display Superbowl results from past 20 years.
+SELECT * FROM superbowls LIMIT 20;
 
 --Display average winning points.
 SELECT avg(winner_pts) FROM superbowls;
