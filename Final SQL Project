@@ -1,0 +1,73 @@
+
+#View all genre types
+SELECT * FROM chinook.genres
+
+
+#Display customers not in the US.
+SELECT firstname, lastname, customerid, country 
+FROM chinook.customers 
+WHERE Country <> "USA"
+
+#Display customers in Norway.
+SELECT firstname, lastname, customerid, country
+FROM chinook.customers
+WHERE Country = "Norway"
+
+#Display invoices from customers in Canada.
+SELECT cust.firstname, cust.lastname, inv.invoiceid, inv.billingcountry, inv.invoicedate
+FROM chinook.invoices AS inv
+LEFT JOIN chinook.customers as cust
+ON inv.customerid=cust.customerid
+WHERE inv.billingcountry = "Canada"
+
+#Display all employees who are managers
+SELECT * FROM chinook.employees
+WHERE title like "%Manager"
+
+#Display all employees with August birthdates
+SELECT firstname, lastname, title, birthdate
+FROM chinook.employees
+WHERE (EDIT)
+
+#Display employees with their total of sales.
+SELECT emp.firstname, emp.lastname,
+ROUND(SUM(inv.total), 2) AS 'Total Sales' 
+FROM chinook.employees emp
+JOIN chinook.customers cust 
+ON cust.supportrepid = emp.employeeid
+JOIN chinook.invoices inv 
+ON inv.customerid = cust.customerid
+WHERE emp.title= 'Sales Support Agent' 
+GROUP BY emp.firstname;
+
+#Display a performance evaluation for employees based on their sales totals.
+SELECT e.FirstName, e.LastName, COUNT(c.SupportRepID) AS "TotalSales",
+CASE 
+WHEN COUNT(c.SupportRepID) < 20 THEN "Needs Review"
+WHEN COUNT(c.SupportRepID) > 19 THEN "None"
+ELSE "N/A"
+END AS "Action Required"
+FROM chinook.customers c
+INNER JOIN chinook.employees e
+ON e.EmployeeID = c.SupportRepId
+GROUP BY e.EmployeeID;
+
+#Display total invoices for the year 2010.
+SELECT COUNT(*)
+FROM chinook.Invoices
+WHERE InvoiceDate BETWEEN '2010-01-01' AND '2010-12-31';
+
+#Display total sales for the year 2010
+SELECT SUM(Total)
+FROM chinook.Invoices
+WHERE InvoiceDate BETWEEN '2010-01-01' AND '2010-12-31'
+
+#Display each purchased track name and artist name with their invoice ID.
+SELECT ar.name as Artist, t.Name as Track, i.InvoiceLineId
+FROM chinook.Invoice_items i
+LEFT JOIN chinook.tracks t 
+ON i.TrackID=t.TrackID
+INNER JOIN chinook.albums a
+ON a.AlbumID=t.AlbumID
+LEFT JOIN chinook.artists ar
+ON ar.ArtistID=a.ArtistID;
