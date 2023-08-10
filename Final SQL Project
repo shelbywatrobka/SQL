@@ -1,7 +1,7 @@
+##In this project, I imported a database and used SQL to query a database with multiple tables, quantifying statistics about customer, employee, and order data.
 
 #View all genre types
 SELECT * FROM chinook.genres
-
 
 #Display customers not in the US.
 SELECT firstname, lastname, customerid, country 
@@ -24,10 +24,8 @@ WHERE inv.billingcountry = "Canada"
 SELECT * FROM chinook.employees
 WHERE title like "%Manager"
 
-#Display all employees with August birthdates
-SELECT firstname, lastname, title, birthdate
-FROM chinook.employees
-WHERE (EDIT)
+#Display distinct billing countries from the invoices table.
+SELECT DISTINCT BillingCountry FROM chinook.Invoices ;
 
 #Display employees with their total of sales.
 SELECT emp.firstname, emp.lastname,
