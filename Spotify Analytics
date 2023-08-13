@@ -67,3 +67,15 @@ GROUP BY s.artist_name)
 SELECT artist_name, average_popularity, 'Top Star' AS tag
 FROM popularity_average_CTE
 WHERE average_popularity>=90;
+
+#Utilizing a CASE statement to rank artist popularity based on how many times they are listed in the top 50.
+SELECT artist_name, COUNT(artist_name) as total_songs,
+CASE
+    WHEN COUNT(artist_name) >=4 THEN 'Most Popular'
+    WHEN COUNT(artist_name) >=3 THEN 'Second Most Popular'
+    WHEN COUNT(artist_name) >=2 THEN 'Third Most Popular'
+    ELSE 'unranked'
+END AS artist_popularity
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY total_songs DESC
