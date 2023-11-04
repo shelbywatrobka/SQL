@@ -16,19 +16,41 @@ FROM database.Tweets
 WHERE airline = "Southwest"
 GROUP BY airline_sentiment
 
-# Displaying data for neagitve tweets about SWA with a reason other than "Can't' tell" and the corresponding confidence level
+# Display total number of positive and negative tweets, excluding neutral
+SELECT airline_sentiment, COUNT(airline_sentiment) AS 'Total Tweets'
+FROM database.Tweets
+WHERE airline_sentiment <> "neutral"
+GROUP BY airline_sentiment
+
+
+#Displaying data for neagitve tweets about SWA with a reason other than "Can't' tell" and the corresponding confidence level
 SELECT * FROM database.Tweets
 WHERE airline_sentiment = 'negative' AND airline='Southwest'
 AND negativereason <> "Can't Tell"
+GROUP BY negativereason
 
-# Display what topic people tweet about SWA the most
+
+#Display negative topics that are tweeted about the most (SWA only)
 SELECT airline_sentiment, negativereason_confidence AS 'confidence_level', negativereason, airline, COUNT(negativereason) AS 'Total_Tweets'
 FROM database.Tweets
-WHERE airline= "Southwest" AND confidence_level >=0.6
+WHERE airline= "Southwest" AND confidence_level >=0.6 AND airline_sentiment = "negative"
 GROUP BY negativereason
 ORDER BY Total_Tweets desc
 
-# Use GROUPBY function to find average negative reason confidence, remove null values (negative reason "can't tell")
+#Display negative topics that are tweeted about the most among all airlines
+SELECT airline_sentiment, COUNT(negativereason) AS 'Total_tweets', negativereason
+FROM database.Tweets
+WHERE airline_sentiment= "negative"
+GROUP BY negativereason
+ORDER BY Total_tweets desc
+
+#Display total positive tweets about SWA
+SELECT airline_sentiment, airline, COUNT(negativereason) AS 'Total_Tweets'
+FROM database.Tweets
+WHERE airline = "Southwest" AND airline_sentiment= "positive"
+
+
+#Use GROUPBY function to find average negative reason confidence, remove null values (negative reason "can't tell")
 SELECT negativereason, AVG(negativereason_confidence) AS average_confidence
 FROM database.Tweets
 WHERE airline_sentiment = 'negative'
@@ -44,7 +66,8 @@ AND Confidence_Level >= 0.7
 AND airline = "Southwest"
 ORDER BY airline_sentiment
 
-##Display most retweeted tweets about SWA
+
+#Display most retweeted tweets about SWA
 SELECT retweet_count AS 'RT', text AS 'Tweet', airline, airline_sentiment
 FROM database.Tweets
 WHERE airline = "Southwest" AND RT >= 1
