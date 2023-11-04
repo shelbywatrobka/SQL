@@ -1,0 +1,51 @@
+## The Database "Twitter US Airline Sentiment" is used to analyze how travelers in Feburary of 2015 expressed their experiences and feelings on Twitter.
+In this SQL I am querying the database to quantify statistics and identify trends about airline customer experience. 
+The raw dataset can be downloaded from: https://www.kaggle.com/crowdflower/twitter-airline-sentiment
+
+
+# Display all data
+SELECT * FROM database.tweets
+
+# Display data for only SWA
+SELECT * FROM database.tweets
+WHERE airline = "Southwest"
+
+# Display total number of positive, negative, and neutral tweets about SWA
+SELECT airline_sentiment, COUNT(airline_sentiment) AS 'Total Tweets'
+FROM database.Tweets
+WHERE airline = "Southwest"
+GROUP BY airline_sentiment
+
+# Displaying data for neagitve tweets about SWA with a reason other than "Can't' tell" and the corresponding confidence level
+SELECT * FROM database.Tweets
+WHERE airline_sentiment = 'negative' AND airline='Southwest'
+AND negativereason <> "Can't Tell"
+
+# Display what topic people tweet about SWA the most
+SELECT airline_sentiment, negativereason_confidence AS 'confidence_level', negativereason, airline, COUNT(negativereason) AS 'Total_Tweets'
+FROM database.Tweets
+WHERE airline= "Southwest" AND confidence_level >=0.6
+GROUP BY negativereason
+ORDER BY Total_Tweets desc
+
+# Use GROUPBY function to find average negative reason confidence, remove null values (negative reason "can't tell")
+SELECT negativereason, AVG(negativereason_confidence) AS average_confidence
+FROM database.Tweets
+WHERE airline_sentiment = 'negative'
+AND negativereason <> "Can't Tell" 
+GROUP BY negativereason
+ORDER BY average_confidence desc
+
+# Display all Tweets involving SWA Flight attendance with a high confidence level (greater than or equal to 0.7)
+SELECT airline, retweet_count AS 'RT', airline_sentiment, negativereason, text AS 'Tweet', airline_sentiment_confidence AS 'Confidence_Level'
+FROM database.Tweets
+WHERE Tweet LIKE '%flight attendant%'
+AND Confidence_Level >= 0.7
+AND airline = "Southwest"
+ORDER BY airline_sentiment
+
+##Display most retweeted tweets about SWA
+SELECT retweet_count AS 'RT', text AS 'Tweet', airline, airline_sentiment
+FROM database.Tweets
+WHERE airline = "Southwest" AND RT >= 1
+ORDER BY RT desc
