@@ -58,6 +58,14 @@ AND negativereason <> "Can't Tell"
 GROUP BY negativereason
 ORDER BY average_confidence desc
 
+# Display all tweets about SWA Flight Attendants
+SELECT tweet_created, name, airline, airline_sentiment, text AS tweet
+FROM database.tweets
+WHERE airline = "Southwest" and tweet LIKE '%flight attendant%'
+AND airline = "Southwest"
+ORDER BY airline_sentiment
+
+
 # Display all Tweets involving SWA Flight attendance with a high confidence level (greater than or equal to 0.7)
 SELECT airline, retweet_count AS 'RT', airline_sentiment, negativereason, text AS 'Tweet', airline_sentiment_confidence AS 'Confidence_Level'
 FROM database.Tweets
